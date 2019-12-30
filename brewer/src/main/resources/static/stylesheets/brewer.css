@@ -113,10 +113,6 @@
 	text-align: right;
 }
 
-.table-cervejas-col-acoes {
-	width: 80px;
-}
-
 /* Colunas - Pesquisa de Estilos */
 .table-estilos-col-codigo {
 	width: 80px;
@@ -210,6 +206,11 @@
 	padding: 0px 5px !important;
 }
 
+/* Box */
+.box-valor-negativo {
+	color: red;
+}
+
 /* Tabela Item */
 .bw-tabela-item {
 	position: relative; /* Para que o painel de exclusão apareça dentro da linha */
@@ -283,6 +284,35 @@
 	font-size: 1.6em;
 }
 
+.bw-tabela-item__painel-exclusao {
+    position: absolute;
+    top: 0;
+    right: 100000px;
+	height: 100%;
+    width: 50%;
+    
+    text-align: center;
+    padding-top: 35px;
+    
+	background-color: #f0ad4e;
+	
+	opacity: 0;
+	transition: opacity 0.5s;
+}
+
+.solicitando-exclusao .bw-tabela-item__painel-exclusao {
+	right: 0;
+	opacity: 1;
+}
+
+.bw-tabela-item__titulo-exclusao {
+    display: block;
+    margin-bottom: 5px;
+    
+	color: #fff;
+    font-size: 1.3em;
+}
+
 @media (min-width: 768px) { /* screen-sm-min */
 	.bw-tabela-item__coluna {
 		float: left;
@@ -297,6 +327,11 @@
 		width: calc(30% - 30px);
 
 		text-align: right;
+	}
+	
+	.bw-tabela-item__painel-exclusao {
+		width: 40%;
+		padding-top: 10px;
 	}
 }
 

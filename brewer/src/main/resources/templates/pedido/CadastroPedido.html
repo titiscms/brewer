@@ -26,12 +26,13 @@
 		
 		<div class="container-fluid">
 			<form method="POST" th:action="@{/pedido/novo}">
+				<input type="hidden" id="uuid" th:value="${uuid}">
 				
 				<div class="row">
 					<div class="col-sm-4">					
 						<div class="aw-box">
 							<div class="aw-box__icon"><i class="fa  fa-usd  fa-3x"></i></div>
-							<div class="aw-box__value">R$0,00</div>
+							<div class="aw-box__value  js-container-valor-box ">R$<span class="js-valor-total-box">0,00</span></div>
 							<div class="aw-box__title">Total</div>
 						</div>
 					</div>
@@ -69,7 +70,7 @@
 						</div>
 					</div>
 					
-					<div class="form-group  col-sm-4  bw-required">
+					<div class="form-group  col-sm-4">
 						<label class="control-label" for="valorFrete">Valor do frete</label>					
 						<div class="input-group">
 							<div class="input-group-addon">R$</div>
@@ -100,7 +101,7 @@
 						<div class="row">
 							<div class="form-group  col-lg-12">
 								<input type="text" class="form-control  js-sku-nome-cerveja-input" id="cerveja" 
-									placeholder="Pesquise e adicione a cerveja pelo SKU ou nome" autofocus="autofocus"/>
+									placeholder="Pesquise e adicione a cerveja pelo SKU ou nome" autofocus="autofocus" data:url="@{/cervejas}"/>
 							</div>
 						</div>
 						
@@ -162,9 +163,11 @@
 	<th:block layout:fragment="javascript-extra">
 		<script th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
 		<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
+		<script th:src="@{/javascripts/vendors/jquery.mobile-events.min.js}"></script>
 		<script th:src="@{/javascripts/cliente.pesquisa-rapida.js}"></script>
 		<script th:src="@{/javascripts/pedido.autocomplete-itens.js}"></script>
 		<script th:src="@{/javascripts/pedido.tabela-itens.js}"></script>
+		<script th:src="@{/javascripts/pedido.js}"></script>
 		<script>
 			$(function() {
 				$('.js-abas-pedido a').click(function(e) {
