@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:brewer="http://www.algaworks.com"
+	  xmlns:th="http://www.thymeleaf.org"
+	  layout:decorate="~{layout/LayoutPadrao}">
+<head>
+<title>Pesquisa de Pedidos</title>
+</head>
+<body>
+
+	<section layout:fragment="conteudo">
+
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Pesquisa de pedidos</h1>
+					</div>
+
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn  btn-default" th:href="@{/pedidos/novo}">
+								<i	class="glyphicon  glyphicon-plus-sign"></i> <span class="hidden-xs  hidden-sm">Novo pedido</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">		
+			<form method="GET" th:object="${pedidoFilter}" th:action="@{/pedidos}">
+			
+				<div class="row">
+					<div class="col-sm-6  form-group">
+						<label for="codigo" class="control-label">Código</label>
+						<input id="codigo" type="text" class="form-control" autofocus="autofocus" th:field="*{codigo}"/>
+					</div>
+					
+					<div class="col-sm-6  fomr-group">
+						<label for="status" class="control-label">Status</label>
+						<select id="status" class="form-control" th:field="*{status}">
+							<option value="">Todos os status</option>
+							<option th:each="status : ${todosStatus}" th:value="${status}" th:text="${status.descricao}">Orçamento</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-6  form-group">
+						<label for="dataInicio" class="control-label">Data de criação</label>
+						<div class="form-inline">
+							<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="dataInicio" th:field="*{dataInicio}" autocomplete="off"/>
+							<label for="dataFim" class="aw-form-label-between">até</label>
+							<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="dataFim" th:field="*{dataFim}" autocomplete="off"/>
+						</div>
+					</div>
+					
+					<div class="col-sm-6  form-group">
+						<label for="valorMin" class="control-label">Valor total</label>
+						<div class="form-inline">
+							<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMin" th:field="*{valorMin}"/>
+							<label for="valorMax" class="aw-form-label-between">até</label>
+							<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMax" th:field="*{valorMax}"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-6  form-group">
+						<label for="nomeCliente" class="control-label">Nome cliente</label>
+						<input id="nomeCliente" type="text" class="form-control" th:field="*{nomeCliente}"/>
+					</div>
+
+					<div class="col-sm-6  form-group">
+						<label for="cpfOuCnpjCliente" class="control-label">CPF/CNPJ</label>
+						<input id="cpfOuCnpjCliente" type="text" class="form-control" th:field="*{cpfOuCnpjCliente}"/>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<button class="btn  btn-primary" type="submit">Pesquisar</button>
+					<input class="btn  btn-primary  bw-btn-limpa-filtros" type="reset" value="Limpar Filtros"/>
+				</div>
+
+			</form>
+
+			<div class="table-responsive  bw-tabela-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-pedidos-col-codigo">Código</th>
+							<th class="table-col-nome">
+								<brewer:order page="${pagina}" field="c.nome" text="Cliente"/>
+							</th>
+							<th class="table-cervejas-col-data-criacao">Data de criação</th>
+							<th class="table-pedidos-col-valor-total">Valor total</th>
+							<th class="table-pedidos-col-vendedor">Vendedor</th>
+							<th class="table-pedidos-col-status">Status</th>
+							<th class="table-col-acoes"></th>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr th:each="pedido : ${pagina.conteudo}">
+							<td th:text="${pedido.codigo}">1</td>
+							<td th:text="${pedido.cliente.nome}">Joice</td>
+							<td th:text="${{pedido.dataCriacao}}">03/01/2020 19:35</td>
+							<td th:text="|R$ ${{pedido.valorTotal}}|">R$8.00</td>
+							<td th:text="${pedido.usuario.nome}">Admin</td>
+							<td th:text="${pedido.status.descricao}">Orçamento</td>
+							<td class="text-center">
+								<a class="btn  btn-link  btn-xs" title="Editar"> <i class="glyphicon glyphicon-pencil"></i></a>
+								<a class="btn  btn-link  btn-xs" title="Excluir"> <i class="glyphicon glyphicon-remove"></i></a>
+							</td>
+						</tr>
+
+						<tr th:if="${pagina.vazia}">
+							<td colspan="7">Nenhum pedido encontrado!</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<brewer:pagination page="${pagina}"/>
+
+		</div>
+
+	</section>
+
+</body>
+</html>

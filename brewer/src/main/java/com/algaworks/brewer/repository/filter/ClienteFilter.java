@@ -3,7 +3,6 @@ package com.algaworks.brewer.repository.filter;
 public class ClienteFilter {
 
 	private String nome;
-	
 	private String cpfOuCnpj;
 
 	public String getNome() {

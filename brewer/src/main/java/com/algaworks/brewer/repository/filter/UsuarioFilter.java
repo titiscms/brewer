@@ -7,9 +7,7 @@ import com.algaworks.brewer.model.Grupo;
 public class UsuarioFilter {
 	
 	private String nome;
-	
 	private String email;
-	
 	private List<Grupo> grupos;
 	
 	public String getNome() {

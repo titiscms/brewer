@@ -21,7 +21,8 @@
 						</a>
 						
 						<ul class="aw-menu__list  aw-menu__list--sublist">
-							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/pedidos}"><a th:href="@{/pedidos/novo}">Novo pedido</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/pedidos/novo}"><a th:href="@{/pedidos/novo}">Novo pedido</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/pedidos}"><a th:href="@{/pedidos}">Pesquisa de pedidos</a></li>
 						</ul>
 					</li>
 						
@@ -32,8 +33,8 @@
 						</a>
 						
 						<ul class="aw-menu__list  aw-menu__list--sublist">
-							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/estilos}"><a th:href="@{/estilos}">Estilos</a></li>
-							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/cervejas}"><a th:href="@{/cervejas}">Cervejas</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/estilos.*}"><a th:href="@{/estilos}">Estilos</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/cervejas.*}"><a th:href="@{/cervejas}">Cervejas</a></li>
 						</ul>
 					</li>
 										
@@ -44,9 +45,9 @@
 						</a>
 						
 						<ul class="aw-menu__list  aw-menu__list--sublist">
-							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/cidades}"><a th:href="@{/cidades}">Cidades</a></li>
-							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/clientes}"><a th:href="@{/clientes}">Clientes</a></li>
-							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/usuarios}"><a th:href="@{/usuarios}">Usuários</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/cidades.*}"><a th:href="@{/cidades}">Cidades</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/clientes.*}"><a th:href="@{/clientes}">Clientes</a></li>
+							<li class="aw-menu__item  aw-menu__item--link" brewer:menu="@{/usuarios.*}"><a th:href="@{/usuarios}">Usuários</a></li>
 						</ul>
 					</li>
 					

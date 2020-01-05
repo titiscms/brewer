@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Cliente;
+import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.repository.filter.ClienteFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
 
@@ -55,7 +56,7 @@ public class ClientesImpl implements ClientesQueries {
 				criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 			}
 			if(filtro.getCpfOuCnpj() != null) {
-				criteria.add(Restrictions.eq("cpfOuCnpj", filtro.getCpfOuCnpj()));
+				criteria.add(Restrictions.eq("cpfOuCnpj", TipoPessoa.removerFormatacao(filtro.getCpfOuCnpj())));
 			}
 		}
 	}
