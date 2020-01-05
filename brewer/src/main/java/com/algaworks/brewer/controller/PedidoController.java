@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.PedidoValidator;
+import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
@@ -53,6 +54,9 @@ public class PedidoController {
 	
 	@Autowired
 	private Pedidos pedidos;
+	
+	@Autowired
+	private Mailer mailer;
 		
 	@InitBinder("pedido")
 	public void inicializarValidador(WebDataBinder binder) {
@@ -113,6 +117,8 @@ public class PedidoController {
 		pedido.setUsuario(usuarioSistema.getUsuario());
 		
 		cadastroPedidoService.salvar(pedido);
+		mailer.enviar(pedido);
+		
 		attributes.addFlashAttribute("mensagem", "Pedido salvo e email enviado com sucesso!");
 		return new ModelAndView("redirect:/pedidos/novo");	
 	}
