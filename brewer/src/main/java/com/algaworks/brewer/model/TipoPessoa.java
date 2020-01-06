@@ -14,7 +14,7 @@ public enum TipoPessoa {
 	JURIDICA("Jurídica", "CNPJ", "00.000.000/0000-00", CnpjGroup.class) {
 		@Override
 		public String formatar(String cpfOuCnpj) {
-			return cpfOuCnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})", "$2.$3.$3/$4-");
+			return cpfOuCnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})", "$1.$2.$3/$4-");
 		}
 	};
 	

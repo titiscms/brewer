@@ -5,7 +5,7 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  layout:decorate="~{layout/LayoutPadrao}">
 <head>
-<title>Pesquisa de Pedidos</title>
+	<title>Pesquisa de Pedidos</title>
 </head>
 <body>
 
@@ -75,7 +75,7 @@
 
 					<div class="col-sm-6  form-group">
 						<label for="cpfOuCnpjCliente" class="control-label">CPF/CNPJ</label>
-						<input id="cpfOuCnpjCliente" type="text" class="form-control" th:field="*{cpfOuCnpjCliente}"/>
+						<input id="cpfOuCnpjCliente" type="text" class="form-control  js-cpf-cnpj-pesquisa" th:field="*{cpfOuCnpjCliente}"/>
 					</div>
 				</div>
 				

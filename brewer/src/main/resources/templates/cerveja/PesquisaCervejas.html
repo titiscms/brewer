@@ -5,7 +5,7 @@
 	  xmlns:th="http://www.thymeleaf.org"
 	  layout:decorate="~{layout/LayoutPadrao}">
 <head>
-<title>Pesquisa de Cerveja</title>
+	<title>Pesquisa de Cerveja</title>
 </head>
 <body>
 
@@ -35,7 +35,7 @@
 				<div class="row">
 					<div class="col-sm-6  form-group">
 						<label for="sku" class="control-label">SKU</label>
-						<input id="sku" type="text" class="form-control" autofocus="autofocus" th:field="*{sku}" />
+						<input id="sku" type="text" class="form-control" autofocus="autofocus" th:field="*{sku}"/>
 					</div>
 
 					<div class="col-sm-6  form-group">
@@ -69,13 +69,13 @@
 						<div>
 							<th:block th:each="origem : ${origens}">
 								<div class="radio  radio-inline">
-									<input th:id="|id_${origem}|" type="radio" th:value="${origem}" th:field="*{origem}" />
+									<input th:id="|id_${origem}|" type="radio" th:value="${origem}" th:field="*{origem}"/>
 									<label th:for="|id_${origem}|" th:text="${origem.descricao}">Nacional</label>
 								</div>
 							</th:block>
 							
 							<div class="radio  radio-inline">
-								<input id="todasOrigens" type="radio" th:checked="*{origem} == null" name="origem" />
+								<input id="todasOrigens" type="radio" th:checked="*{origem} == null" name="origem"/>
 								<label for="todasOrigens">Todas</label>
 							</div>
 						</div>
@@ -125,7 +125,7 @@
 
 					<tbody>
 						<tr th:each="cerveja : ${pagina.conteudo}">
-							<td class="text-center"><img th:src="@{/fotos/thumbnail.{foto}(foto=${cerveja.fotoOuMock})}" class="img-responsive" /></td>
+							<td class="text-center"><img th:src="@{/fotos/thumbnail.{foto}(foto=${cerveja.fotoOuMock})}" class="img-responsive"/></td>
 							<td class="text-center" th:text="${cerveja.sku}">AA1234</td>
 							<td th:text="${cerveja.nome}">Cerveja Stella</td>
 							<td th:text="${cerveja.estilo.nome}">Lager</td>

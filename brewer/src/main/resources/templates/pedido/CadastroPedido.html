@@ -6,11 +6,9 @@
 	xmlns:data="http://www.thymeleaf.org/extras/data"
 	layout:decorate="~{layout/LayoutPadrao}">
 <head>
-<title>Cadastro de pedido</title>
-<link rel="stylesheet" type="text/css"
-	th:href="@{/stylesheets/vendors/easy-autocomplete.min.css}" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/stylesheets/vendors/easy-autocomplete.themes.min.css}" />
+	<title>Cadastro de pedido</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/easy-autocomplete.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/easy-autocomplete.themes.min.css}"/>
 </head>
 <body>
 
@@ -70,7 +68,7 @@
 					<div class="form-group  col-sm-4  bw-required" brewer:classforerror="cliente.codigo">
 						<label class="control-label" for="nomeCliente">Cliente</label>
 						<div class="input-group">
-							<input id="nomeCliente" type="text" readonly="readonly"	class="form-control" placeholder="Clique na lupa para pesquisar" th:field="*{cliente.nome}"/>
+							<input id="nomeCliente" type="text" readonly="readonly"	class="form-control" placeholder="Clique na lupa para pesquisar" th:field="*{cliente.nome}" autofocus="autofocus"/>
 							<input id="codigoCliente" type="hidden" th:field="*{cliente}" />
 							<span class="input-group-btn">
 								<button class="btn  btn-default  js-tooltip" type="button" title="Pesquisa avançada" data-toggle="modal" data-target="#pesquisaRapidaClientes"><i class="glyphicon  glyphicon-search"></i></button>
@@ -119,15 +117,14 @@
 
 					<div class="tab-pane" id="entrega">
 						<div class="row">
-							<div class="form-group  col-sm-3"
-								brewer:classforerror="dataEntrega">
+							<div class="form-group  col-sm-3" brewer:classforerror="dataEntrega">
 								<label class="control-label" for="dataEntrega">Data de entrega</label>
-								<input type="text" class="form-control"	id="dataEntrega" autofocus="autofocus" th:field="*{dataEntrega}" />
+								<input type="text" class="form-control  js-date" id="dataEntrega" autofocus="autofocus" th:field="*{dataEntrega}" autocomplete="off"/>
 							</div>
 
 							<div class="form-group  col-sm-3">
 								<label class="control-label" for="horarioEntrega">Horario de entrega</label>
-								<input type="text" class="form-control" id="horarioEntrega" th:field="*{horarioEntrega}" />
+								<input type="text" class="form-control  js-time" id="horarioEntrega" th:field="*{horarioEntrega}" />
 							</div>
 						</div>
 
@@ -165,8 +162,7 @@
 	</section>
 
 	<th:block layout:fragment="javascript-extra">
-		<script
-			th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
+		<script	th:src="@{/javascripts/vendors/jquery.easy-autocomplete.min.js}"></script>
 		<script th:src="@{/javascripts/vendors/handlebars.min.js}"></script>
 		<script th:src="@{/javascripts/vendors/jquery.mobile-events.min.js}"></script>
 		<script th:src="@{/javascripts/cliente.pesquisa-rapida.js}"></script>

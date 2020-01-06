@@ -47,6 +47,20 @@ Brewer.Pedido = (function() {
 	
 }());
 
+Brewer.MaskTime = (function() {
+	
+	function MaskTime() {
+		this.horarioEntregaInput = $('.js-time');
+	}
+	
+	MaskTime.prototype.iniciar = function() {
+		this.horarioEntregaInput.mask('00:00');
+	}
+	
+	return MaskTime;
+}());
+
+
 $(function() {
 		
 	var autocomplete = new Brewer.Autocomplete();
@@ -57,5 +71,8 @@ $(function() {
 	
 	var pedido = new Brewer.Pedido(tabelaItens);
 	pedido.iniciar();
+	
+	var maskTime = new Brewer.MaskTime();
+	maskTime.iniciar();
 	
 });
