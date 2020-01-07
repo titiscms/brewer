@@ -194,6 +194,10 @@ public class Cerveja {
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
 	}
+	
+	public boolean temFoto() {
+		return !StringUtils.isEmpty(this.foto);
+	}
 
 	@Override
 	public int hashCode() {

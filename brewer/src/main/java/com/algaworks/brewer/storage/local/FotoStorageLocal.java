@@ -81,6 +81,11 @@ public class FotoStorageLocal implements FotoStorage {
 		}
 	}
 	
+	@Override
+	public byte[] recuperarThumbnail(String fotoCerveja) {
+		return recuperarFoto("thumbnail." + fotoCerveja);
+	}
+	
 	private void criarPastas() {
 		try {
 			Files.createDirectories(this.local);
@@ -106,5 +111,4 @@ public class FotoStorageLocal implements FotoStorage {
 		
 		return novoNome;
 	}
-
 }
