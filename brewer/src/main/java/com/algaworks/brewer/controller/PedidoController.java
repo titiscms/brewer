@@ -116,10 +116,10 @@ public class PedidoController {
 		
 		pedido.setUsuario(usuarioSistema.getUsuario());
 		
-		cadastroPedidoService.salvar(pedido);
+		pedido = cadastroPedidoService.salvar(pedido);
 		mailer.enviar(pedido);
 		
-		attributes.addFlashAttribute("mensagem", "Pedido salvo e email enviado com sucesso!");
+		attributes.addFlashAttribute("mensagem", String.format("Pedido nº %d salvo com sucesso e email enviado!", pedido.getCodigo()));
 		return new ModelAndView("redirect:/pedidos/novo");	
 	}
 

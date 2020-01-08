@@ -18,17 +18,16 @@ public class CadastroPedidoService {
 	private Pedidos pedidos;
 	
 	@Transactional
-	public void salvar(Pedido pedido) {
+	public Pedido salvar(Pedido pedido) {
 		if(pedido.isNova()) {
 			pedido.setDataCriacao(LocalDateTime.now());
 		}
 				
 		if(pedido.getDataEntrega() != null) {
-			pedido.setDataHoraEntrega(LocalDateTime.of(pedido.getDataEntrega()
-					, pedido.getHorarioEntrega() != null ? pedido.getHorarioEntrega() : LocalTime.NOON));
+			pedido.setDataHoraEntrega(LocalDateTime.of(pedido.getDataEntrega(), pedido.getHorarioEntrega() != null ? pedido.getHorarioEntrega() : LocalTime.NOON));
 		}
 		
-		pedidos.save(pedido);
+		return pedidos.save(pedido);
 	}
 
 	@Transactional

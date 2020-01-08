@@ -1,6 +1,7 @@
 package com.algaworks.brewer.mail;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.mail.MessagingException;
@@ -40,7 +41,7 @@ public class Mailer {
 	@Async
 	public void enviar(Pedido pedido) {
 		
-		Context context = new Context();
+		Context context = new Context(new Locale("pt", "BR"));
 		context.setVariable("pedido", pedido);
 		context.setVariable("logo", "logo");
 		
@@ -66,7 +67,7 @@ public class Mailer {
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 			helper.setFrom("titisbackup@gmail.com");
 			helper.setTo(pedido.getCliente().getEmail());
-			helper.setSubject("Brewer - Pedido realizado");
+			helper.setSubject(String.format("Brewer - Pedido nº %d realizado", pedido.getCodigo()));
 			helper.setText(email, true);
 			
 			helper.addInline("logo", new ClassPathResource("static/images/logo-gray.png"));
