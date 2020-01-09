@@ -19,17 +19,20 @@ Brewer.DialogoExcluir = (function() {
 		var botaoClicado = $(evento.currentTarget);
 		var url = botaoClicado.data('url');
 		var objeto = botaoClicado.data('objeto');
-		
+
 		swal({
 			  title: 'Você tem certeza?',
 			  text: 'Excluir "' + objeto + '"? Você não poderá recuperar depois.',
 			  icon: 'warning',
-			  showCancelButton: true,
+			  animation: true,
 			  confirmButtonColor: '#dd6b55',
-			  confirmButtonText: 'Sim, exclua agora!',
+			  confirmButtonText: 'Sim, excluir agora!',
+			  showCancelButton: true,
 			  closeOnConfirm: false
 				
-			}, onExcluirConfirmado.bind(this, url));
+			}, onExcluirConfirmado.bind(this, url), 'warning');
+		
+		this.removeStyleDiv = $('div.sa-icon.sa-warning').removeAttr('style');
 	}
 	
 	function onExcluirConfirmado(url) {

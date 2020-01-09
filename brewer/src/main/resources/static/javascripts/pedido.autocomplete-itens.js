@@ -31,7 +31,7 @@ Brewer.Autocomplete = (function() {
 		};
 		
 		this.skuOuNomeInput.easyAutocomplete(options);
-		this.removeSyleDiv = $('div.easy-autocomplete').removeAttr('style');
+		this.removeStyleDiv = $('div.easy-autocomplete').removeAttr('style');
 	}
 	
 	function onItemSelecionado() {
