@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,10 @@ public class CadastroPedidoService {
 	
 	@Transactional
 	public Pedido salvar(Pedido pedido) {
+		if(pedido.isSalvarProibido()) {
+			throw new RuntimeException("Usuário tentando salvar um pedido proibido");
+		}
+		
 		if(pedido.isNovo()) {
 			pedido.setDataCriacao(LocalDateTime.now());
 		} else {
@@ -37,5 +42,14 @@ public class CadastroPedidoService {
 	public void emitir(Pedido pedido) {
 		pedido.setStatus(StatusPedido.EMITIDA);
 		salvar(pedido);
+	}
+
+	@PreAuthorize("#pedido.usuario == principal.usuario or hasRole('CANCELAR_PEDIDO')")
+	@Transactional
+	public void cancelar(Pedido pedido) {
+		Pedido pedidoExistente = pedidos.findOne(pedido.getCodigo());
+		
+		pedidoExistente.setStatus(StatusPedido.CANCELADA);
+		pedidos.save(pedidoExistente);
 	}
 }
