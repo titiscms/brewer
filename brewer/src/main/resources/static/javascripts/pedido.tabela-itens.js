@@ -71,7 +71,7 @@ Brewer.TabelaItens = (function() {
 	function onExclusaoItemClick(evento) {
 		var codigoCerveja = $(evento.target).data('codigo-cerveja');
 		var resposta = $.ajax({
-			url: 'item/' + this.uuid + "/" + codigoCerveja,
+			url: 'item/' + this.uuid + '/' + codigoCerveja,
 			method: 'DELETE'
 		});
 		

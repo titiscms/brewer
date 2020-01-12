@@ -135,7 +135,7 @@ public class PedidoController {
 		return mvTabelaItensPedido(uuid);
 	}
 	
-	@DeleteMapping("item/{codigoCerveja}")
+	@DeleteMapping("/item/{uuid}/{codigoCerveja}")
 	public ModelAndView excluirItem(@PathVariable("codigoCerveja") Cerveja cerveja, @PathVariable String uuid) {
 		tabelaItens.removerItem(uuid, cerveja);
 		return mvTabelaItensPedido(uuid);
