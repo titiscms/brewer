@@ -18,7 +18,8 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-10">
-						<h1>Cadastro de pedidos</h1>
+						<h1 th:if="${pedido.novo}">Cadastro de pedidos</h1>
+						<h1 th:if="${not pedido.novo}">Edição de pedido nº: [[${pedido.codigo}]] </h1>
 					</div>
 					
 					<div class="col-xs-2">
@@ -33,10 +34,11 @@
 		</div>
 
 		<div class="container-fluid">
-			<form method="POST" th:action="@{/pedidos/novo}"th:object="${pedido}" class="js-formulario-principal">
-				<brewer:message />
+			<form method="POST" th:action="@{/pedidos/novo}" th:object="${pedido}" class="js-formulario-principal">
+				<brewer:message/>
 
-				<input type="hidden" id="uuid" th:field="*{uuid}">
+				<input type="hidden" id="uuid" th:field="*{uuid}"/>
+				<input type="hidden" th:field="*{codigo}"/>
 
 				<div class="row">
 					<div class="col-sm-4">
@@ -50,7 +52,7 @@
 					<div class="col-sm-4">
 						<div class="aw-box">
 							<div class="aw-box__icon"><i class="fa  fa-tag  fa-3x"></i></div>
-							<div class="aw-box__value">Orçamento</div>
+							<div class="aw-box__value" th:text="${pedido.status.descricao}">Orçamento</div>
 							<div class="aw-box__title">Status</div>
 						</div>
 					</div>
@@ -58,7 +60,11 @@
 					<div class="col-sm-4">
 						<div class="aw-box">
 							<div class="aw-box__icon"><i class="fa  fa-calendar  fa-3x"></i></div>
-							<div class="aw-box__value"><span class="js-tooltip">Hoje</span></div>
+							<div class="aw-box__value">
+								<span class="js-tooltip" th:if="${pedido.diasCriacao == 0}">Hoje</span>
+								<span class="js-tooltip" th:if="${pedido.diasCriacao == 1}">Há 1 dia</span>
+								<span class="js-tooltip" th:if="${pedido.diasCriacao > 1}">Há [[${pedido.diasCriacao}]]dias</span>
+							</div>
 							<div class="aw-box__title">Criação</div>
 						</div>
 					</div>

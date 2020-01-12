@@ -26,6 +26,7 @@ import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.PedidoValidator;
 import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.model.Cerveja;
+import com.algaworks.brewer.model.ItemPedido;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
 import com.algaworks.brewer.repository.Cervejas;
@@ -67,9 +68,7 @@ public class PedidoController {
 	public ModelAndView novo(Pedido pedido) {
 		ModelAndView mv = new ModelAndView("pedido/CadastroPedido");
 		
-		if(StringUtils.isEmpty(pedido.getUuid())) {
-			pedido.setUuid(UUID.randomUUID().toString());
-		}
+		setUuid(pedido);
 		
 		mv.addObject("itens", pedido.getItens());
 		mv.addObject("valorFrete", pedido.getValorFrete());
@@ -153,6 +152,20 @@ public class PedidoController {
 		
 		return mv;
 	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Pedido pedido = pedidos.buscarComItens(codigo);
+		
+		setUuid(pedido);
+		for(ItemPedido item : pedido.getItens()) {
+			tabelaItens.adicionarItem(pedido.getUuid(), item.getCerveja(), item.getQuantidade());
+		}
+		
+		ModelAndView mv = novo(pedido);
+		mv.addObject(pedido);
+		return mv;
+	}
 
 	private ModelAndView mvTabelaItensPedido(String uuid) {
 		ModelAndView mv = new ModelAndView("pedido/TabelaItensPedido");
@@ -166,5 +179,11 @@ public class PedidoController {
 		pedido.calcularValorTotal();
 		
 		pedidoValidator.validate(pedido, result);
+	}
+	
+	private void setUuid(Pedido pedido) {
+		if(StringUtils.isEmpty(pedido.getUuid())) {
+			pedido.setUuid(UUID.randomUUID().toString());
+		}
 	}
 }

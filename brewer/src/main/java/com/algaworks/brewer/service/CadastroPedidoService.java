@@ -19,8 +19,11 @@ public class CadastroPedidoService {
 	
 	@Transactional
 	public Pedido salvar(Pedido pedido) {
-		if(pedido.isNova()) {
+		if(pedido.isNovo()) {
 			pedido.setDataCriacao(LocalDateTime.now());
+		} else {
+			Pedido pedidoExistente = pedidos.findOne(pedido.getCodigo());
+			pedido.setDataCriacao(pedidoExistente.getDataCriacao());
 		}
 				
 		if(pedido.getDataEntrega() != null) {

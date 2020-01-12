@@ -9,4 +9,7 @@ import com.algaworks.brewer.repository.filter.PedidoFilter;
 public interface PedidosQueries {
 	
 	public Page<Pedido> filtrar(PedidoFilter filtro, Pageable pageable);
+	
+	public Pedido buscarComItens(Long codigo);
+
 }
