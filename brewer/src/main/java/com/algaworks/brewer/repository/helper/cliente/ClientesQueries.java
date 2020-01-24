@@ -9,4 +9,7 @@ import com.algaworks.brewer.repository.filter.ClienteFilter;
 public interface ClientesQueries {
 
 	public Page<Cliente> filtrar(ClienteFilter filtro, Pageable pageable);
+	
+	public Cliente buscarEstadoCidadeCliente(Long codigo);
+	
 }

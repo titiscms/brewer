@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,7 +52,7 @@ public class ClientesController {
 		return mv;
 	}
 	
-	@PostMapping("/novo")
+	@PostMapping(value = { "/novo", "{\\d+}" })
 	public @ResponseBody ModelAndView salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
 			return novo(cliente);
@@ -82,15 +83,23 @@ public class ClientesController {
 		validarTamanhoNome(nome);
 		return clientes.findByNomeStartingWithIgnoreCase(nome);
 	}
-
-	private void validarTamanhoNome(String nome) {
-		if(StringUtils.isEmpty(nome) || nome.length() < 3) {
-			throw new IllegalArgumentException();
-		}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Cliente cliente = clientes.buscarEstadoCidadeCliente(codigo);
+		ModelAndView mv = novo(cliente);
+		mv.addObject(cliente);
+		return mv;
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Void> tratarIllegalArgumentException(IllegalArgumentException e) {
 		return ResponseEntity.badRequest().build();
+	}
+	
+	private void validarTamanhoNome(String nome) {
+		if(StringUtils.isEmpty(nome) || nome.length() < 3) {
+			throw new IllegalArgumentException();
+		}
 	}
 }

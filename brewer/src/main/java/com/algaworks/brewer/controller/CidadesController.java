@@ -13,7 +13,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -82,6 +84,20 @@ public class CidadesController {
 		
 		PageWrapper<Cidade> paginaWrapper = new PageWrapper<>(cidades.filtrar(cidadeFilter, pageable), httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
+		return mv;
+	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Cidade cidade = cidades.buscarComEstado(codigo);
+		ModelAndView mv = nova(cidade);
+		mv.addObject(cidade);
+		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public ModelAndView excluir(@PathVariable Cidade cidade) {
+		ModelAndView mv = nova(cidade);
 		return mv;
 	}
 }

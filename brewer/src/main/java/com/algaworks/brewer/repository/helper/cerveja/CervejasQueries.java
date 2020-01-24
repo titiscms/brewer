@@ -14,4 +14,5 @@ public interface CervejasQueries {
 	public Page<Cerveja> filtrar(CervejaFilter filtro, Pageable pageable);
 	
 	public List<CervejaDTO> porSkuOuNome(String skuOuNome);
+	
 }
