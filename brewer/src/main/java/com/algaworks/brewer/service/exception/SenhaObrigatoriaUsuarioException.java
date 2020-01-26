@@ -1,4 +1,5 @@
-package com.algaworks.brewer.service;
+package com.algaworks.brewer.service.exception;
+
 
 public class SenhaObrigatoriaUsuarioException extends RuntimeException {
 

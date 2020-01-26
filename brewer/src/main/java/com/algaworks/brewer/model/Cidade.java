@@ -66,7 +66,7 @@ public class Cidade implements Serializable {
 	}
 	
 	public boolean isNova() {
-		return codigo == null;
+		return this.codigo == null;
 	}
 
 	@Override

@@ -2,17 +2,21 @@ package com.algaworks.brewer.service;
 
 import java.util.Optional;
 
+import javax.persistence.PersistenceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Usuario;
 import com.algaworks.brewer.repository.Usuarios;
 import com.algaworks.brewer.service.exception.EmailUsuarioCadastradoException;
+import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
+import com.algaworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
 
-@Repository
+@Service
 public class CadastroUsuarioService {
 	
 	@Autowired
@@ -31,7 +35,7 @@ public class CadastroUsuarioService {
 		if(usuario.isNovo() && StringUtils.isEmpty(usuario.getSenha())) {
 			throw new SenhaObrigatoriaUsuarioException("Senha é obrigatória para novo usuário");
 		}
-		
+			
 		if(usuario.isNovo() || !StringUtils.isEmpty(usuario.getSenha())) {
 			usuario.setSenha(this.passwordEncoder.encode(usuario.getSenha()));
 		} else if(StringUtils.isEmpty(usuario.getSenha())) {
@@ -49,5 +53,15 @@ public class CadastroUsuarioService {
 	@Transactional
 	public void alterarStatus(Long[] codigos, StatusUsuario statusUsuario) {
 		statusUsuario.executar(codigos, usuarios);
+	}
+
+	@Transactional
+	public void excluir(Usuario usuario) {
+		try {
+			this.usuarios.delete(usuario);
+			this.usuarios.flush();
+		} catch (PersistenceException e) {
+			throw new ImpossivelExcluirEntidadeException("Impossível apagar usuario. Já está atrelado a algum pedido.");
+		}
 	}
 }

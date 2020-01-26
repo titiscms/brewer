@@ -47,7 +47,7 @@ Brewer.ComboCidade = (function() {
 				url: this.combo.data('url'),
 				method: 'GET',
 				contentType: 'application/json',
-				data: { 'estado' : codigoEstado }, 
+				data: { 'estado': codigoEstado }, 
 				beforeSend: iniciarRequisicao.bind(this),
 				complete: finalizarRequisicao.bind(this)
 			});

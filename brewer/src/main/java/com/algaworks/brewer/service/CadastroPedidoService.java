@@ -3,6 +3,8 @@ package com.algaworks.brewer.service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import javax.persistence.PersistenceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
 import com.algaworks.brewer.repository.Pedidos;
+import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
 
 @Service
 public class CadastroPedidoService {
@@ -51,5 +54,15 @@ public class CadastroPedidoService {
 		
 		pedidoExistente.setStatus(StatusPedido.CANCELADA);
 		pedidos.save(pedidoExistente);
+	}
+
+	@Transactional
+	public void excluir(Pedido pedido) {
+		try {
+			this.pedidos.delete(pedido);
+			this.pedidos.flush();
+		} catch (PersistenceException e) {
+			throw new ImpossivelExcluirEntidadeException("Impossível apagar pedido.");
+		}
 	}
 }

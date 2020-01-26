@@ -47,7 +47,7 @@ public class Estilo implements Serializable {
 	}
 	
 	public boolean isNovo() {
-		return codigo == null;
+		return this.codigo == null;
 	}
 
 	@Override

@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,9 +27,10 @@ import com.algaworks.brewer.repository.Grupos;
 import com.algaworks.brewer.repository.Usuarios;
 import com.algaworks.brewer.repository.filter.UsuarioFilter;
 import com.algaworks.brewer.service.CadastroUsuarioService;
-import com.algaworks.brewer.service.SenhaObrigatoriaUsuarioException;
+import com.algaworks.brewer.service.exception.SenhaObrigatoriaUsuarioException;
 import com.algaworks.brewer.service.StatusUsuario;
 import com.algaworks.brewer.service.exception.EmailUsuarioCadastradoException;
+import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
 
 @Controller
 @RequestMapping("/usuarios")
@@ -91,5 +94,15 @@ public class UsuariosController {
 		ModelAndView mv = novo(usuario);
 		mv.addObject(usuario);
 		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public ResponseEntity<?> excluir(@PathVariable("codigo") Usuario usuario) {
+		try {
+			this.cadastroUsuarioService.excluir(usuario);
+		} catch (ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
 	}
 }

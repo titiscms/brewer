@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +31,7 @@ import com.algaworks.brewer.repository.Estados;
 import com.algaworks.brewer.repository.filter.ClienteFilter;
 import com.algaworks.brewer.service.CadastroClienteService;
 import com.algaworks.brewer.service.exception.CpfCnpjClientejaCadastradoException;
+import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
 
 @Controller
 @RequestMapping("/clientes")
@@ -53,7 +55,7 @@ public class ClientesController {
 	}
 	
 	@PostMapping(value = { "/novo", "{\\d+}" })
-	public @ResponseBody ModelAndView salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
+	public ModelAndView salvar(@Valid Cliente cliente, BindingResult result, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
 			return novo(cliente);
 		}
@@ -69,9 +71,10 @@ public class ClientesController {
 		return new ModelAndView("redirect:/clientes/novo");
 	}
 	
-	@GetMapping()
+	@GetMapping
 	public ModelAndView pesquisar(ClienteFilter clienteFilter, BindingResult result, @PageableDefault(size = 3) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("cliente/PesquisaClientes");
+		mv.addObject("tiposPessoa", TipoPessoa.values());
 		
 		PageWrapper<Cliente> paginaWrapper = new PageWrapper<>(clientes.filtrar(clienteFilter, pageable), httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
@@ -84,12 +87,10 @@ public class ClientesController {
 		return clientes.findByNomeStartingWithIgnoreCase(nome);
 	}
 	
-	@GetMapping("/{codigo}")
-	public ModelAndView editar(@PathVariable Long codigo) {
-		Cliente cliente = clientes.buscarEstadoCidadeCliente(codigo);
-		ModelAndView mv = novo(cliente);
-		mv.addObject(cliente);
-		return mv;
+	private void validarTamanhoNome(String nome) {
+		if(StringUtils.isEmpty(nome) || nome.length() < 3) {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
@@ -97,9 +98,21 @@ public class ClientesController {
 		return ResponseEntity.badRequest().build();
 	}
 	
-	private void validarTamanhoNome(String nome) {
-		if(StringUtils.isEmpty(nome) || nome.length() < 3) {
-			throw new IllegalArgumentException();
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Cliente cliente = this.clientes.buscarEstadoCidadeCliente(codigo);
+		ModelAndView mv = this.novo(cliente);
+		mv.addObject(cliente);
+		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public ResponseEntity<?> excluir(@PathVariable("codigo") Cliente cliente) {
+		try {
+			this.cadastroClienteService.excluir(cliente);
+		} catch (ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
+		return ResponseEntity.ok().build();
 	}
 }

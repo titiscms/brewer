@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -30,17 +31,19 @@ import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.ItemPedido;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
+import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.repository.Cervejas;
 import com.algaworks.brewer.repository.Pedidos;
 import com.algaworks.brewer.repository.filter.PedidoFilter;
 import com.algaworks.brewer.security.UsuarioSistema;
 import com.algaworks.brewer.service.CadastroPedidoService;
+import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
 import com.algaworks.brewer.session.TabelaItensSession;
 
 
 @Controller
 @RequestMapping("/pedidos")
-public class PedidoController {
+public class PedidosController {
 
 	@Autowired
 	private Cervejas cervejas;
@@ -123,18 +126,6 @@ public class PedidoController {
 		return new ModelAndView("redirect:/pedidos/novo");
 	}
 	
-	@PostMapping(value = "/novo", params = "cancelar")
-	public ModelAndView cancelar(Pedido pedido, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
-		try {
-			cadastroPedidoService.cancelar(pedido);
-		} catch (AccessDeniedException e) {
-			return new ModelAndView("/403");
-		}
-		
-		attributes.addFlashAttribute("mensagem", "Pedido cancelado com sucesso");
-		return new ModelAndView("redirect:/pedidos/" + pedido.getCodigo());
-	}
-	
 	@PostMapping("/item")
 	public ModelAndView adicionarItem(Long codigoCerveja, String uuid) {
 		Cerveja cerveja = cervejas.findOne(codigoCerveja);
@@ -157,8 +148,8 @@ public class PedidoController {
 	@GetMapping()
 	public ModelAndView pesquisar(PedidoFilter pedidoFilter, BindingResult result, @PageableDefault(size = 4) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("pedido/PesquisaPedidos");
-		mv.addObject("pedidos", pedidos.findAll());
 		mv.addObject("todosStatus", StatusPedido.values());
+		mv.addObject("tiposPessoa", TipoPessoa.values());
 		
 		PageWrapper<Pedido> paginaWrapper = new PageWrapper<>(pedidos.filtrar(pedidoFilter, pageable), httpServletRequest);
 		mv.addObject("pagina", paginaWrapper);
@@ -178,6 +169,28 @@ public class PedidoController {
 		ModelAndView mv = novo(pedido);
 		mv.addObject(pedido);
 		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public ResponseEntity<?> excluir(@PathVariable("codigo") Pedido pedido) {
+		try {
+			this.cadastroPedidoService.excluir(pedido);
+		} catch (ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping(value = "/novo", params = "cancelar")
+	public ModelAndView cancelar(Pedido pedido, BindingResult result, RedirectAttributes attributes, @AuthenticationPrincipal UsuarioSistema usuarioSistema) {
+		try {
+			cadastroPedidoService.cancelar(pedido);
+		} catch (AccessDeniedException e) {
+			return new ModelAndView("/403");
+		}
+		
+		attributes.addFlashAttribute("mensagem", "Pedido cancelado com sucesso");
+		return new ModelAndView("redirect:/pedidos/" + pedido.getCodigo());
 	}
 
 	private ModelAndView mvTabelaItensPedido(String uuid) {

@@ -63,7 +63,7 @@ public class Cliente implements Serializable {
 	
 	@PrePersist
 	@PreUpdate
-	private void PrePersistPreUpdate() {
+	private void prePersistPreUpdate() {
 		this.cpfOuCnpj = TipoPessoa.removerFormatacao(this.cpfOuCnpj);
 	}
 
@@ -133,7 +133,7 @@ public class Cliente implements Serializable {
 	}
 	
 	public boolean isNovo() {
-		return codigo == null;
+		return this.codigo == null;
 	}
 
 	@Override

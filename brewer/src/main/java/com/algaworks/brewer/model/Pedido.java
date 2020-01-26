@@ -187,7 +187,7 @@ public class Pedido {
 	}
 	
 	public boolean isNovo() {
-		return codigo == null;
+		return this.codigo == null;
 	}
 	
 	public void adicionarItens(List<ItemPedido> itens) {
