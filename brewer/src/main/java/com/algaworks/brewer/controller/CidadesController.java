@@ -80,7 +80,7 @@ public class CidadesController {
 		return new ModelAndView("redirect:/cidades/nova");
 	}
 	
-	@GetMapping()
+	@GetMapping
 	public ModelAndView pesquisar(CidadeFilter cidadeFilter, BindingResult result, @PageableDefault(size = 5) Pageable pageable, HttpServletRequest httpServletRequest) {
 		ModelAndView mv = new ModelAndView("cidade/PesquisaCidades");
 		mv.addObject("estados", estados.findAll());
@@ -91,7 +91,7 @@ public class CidadesController {
 	}
 	
 	@DeleteMapping("/{codigo}")
-	public ResponseEntity<?> excluir(@PathVariable Cidade cidade) {
+	public ResponseEntity<?> excluir(@PathVariable("codigo") Cidade cidade) {
 		try {
 			this.cadastroCidadeService.excluir(cidade);
 		} catch(ImpossivelExcluirEntidadeException e) {
