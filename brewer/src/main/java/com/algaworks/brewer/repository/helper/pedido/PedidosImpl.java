@@ -1,7 +1,11 @@
 package com.algaworks.brewer.repository.helper.pedido;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.MonthDay;
+import java.time.Year;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.model.Pedido;
+import com.algaworks.brewer.model.StatusPedido;
 import com.algaworks.brewer.model.TipoPessoa;
 import com.algaworks.brewer.repository.filter.PedidoFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
@@ -53,6 +58,33 @@ public class PedidosImpl implements PedidosQueries {
 		criteria.add(Restrictions.eq("codigo", codigo));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		return (Pedido) criteria.uniqueResult();
+	}
+	
+	@Override
+	public BigDecimal valorTotalNoAno() {
+		Optional<BigDecimal> optional = Optional.ofNullable(manager.createQuery("select sum(valorTotal) from Pedido where year(dataCriacao) = :ano and status = :status", BigDecimal.class)
+			.setParameter("ano", Year.now().getValue())
+			.setParameter("status", StatusPedido.EMITIDA)
+			.getSingleResult());
+		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public BigDecimal valorTotalNoMes() {
+		Optional<BigDecimal> optional = Optional.ofNullable(manager.createQuery("select sum(valorTotal) from Pedido where month(dataCriacao) = :mes and status = :status", BigDecimal.class)
+			.setParameter("mes",  MonthDay.now().getMonthValue())
+			.setParameter("status", StatusPedido.EMITIDA)
+			.getSingleResult());
+		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@Override
+	public BigDecimal valorTicketMedioNoAno() {
+		Optional<BigDecimal> optional = Optional.ofNullable(manager.createQuery("select sum(valorTotal)/count(*) from Pedido where year(dataCriacao) = :ano and status = :status", BigDecimal.class)
+			.setParameter("ano", Year.now().getValue())
+			.setParameter("status", StatusPedido.EMITIDA)
+			.getSingleResult());
+		return optional.orElse(BigDecimal.ZERO);
 	}
 
 	private Long total(PedidoFilter filtro) {
