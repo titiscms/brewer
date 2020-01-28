@@ -1,10 +1,12 @@
 package com.algaworks.brewer.repository.helper.pedido;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.MonthDay;
 import java.time.Year;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -23,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.algaworks.brewer.dto.PedidoMes;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -85,6 +88,30 @@ public class PedidosImpl implements PedidosQueries {
 			.setParameter("status", StatusPedido.EMITIDA)
 			.getSingleResult());
 		return optional.orElse(BigDecimal.ZERO);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PedidoMes> totalPorMes() {
+		List<PedidoMes> pedidosMes = manager.createNamedQuery("Pedido.totalPorMes").getResultList();
+		
+		LocalDate hoje = LocalDate.now();
+		for(int i = 1; i <= 6; i++) {
+			String mesIdeal = String.format("%d/%02d", hoje.getYear(), hoje.getMonthValue());
+			
+			boolean possuiMes = pedidosMes.stream().filter(v -> v.getMes().equals(mesIdeal)).findAny().isPresent();
+			if(!possuiMes) {
+				pedidosMes.add(i - 1, new PedidoMes(mesIdeal, 0));
+			}
+			
+			if(pedidosMes.size() > 6){
+				pedidosMes.remove(pedidosMes.size() - 1);
+			}
+			
+			hoje = hoje.minusMonths(1);
+		}
+		
+		return pedidosMes;
 	}
 
 	private Long total(PedidoFilter filtro) {
