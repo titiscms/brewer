@@ -114,6 +114,12 @@ public class PedidosImpl implements PedidosQueries {
 		return pedidosMes;
 	}
 
+	@Override
+	public BigDecimal valorTotalEstoque() {
+		
+		return null;
+	}
+
 	private Long total(PedidoFilter filtro) {
 		Criteria criteria = manager.unwrap(Session.class).createCriteria(Pedido.class);
 		adicionarFiltro(filtro, criteria);

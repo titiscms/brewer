@@ -24,5 +24,7 @@ public interface PedidosQueries {
 	public BigDecimal valorTicketMedioNoAno();
 	
 	public List<PedidoMes> totalPorMes();
+	
+	public BigDecimal valorTotalEstoque();
 
 }

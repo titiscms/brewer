@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import javax.persistence.PersistenceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
 import com.algaworks.brewer.repository.Pedidos;
+import com.algaworks.brewer.service.event.pedido.PedidoEvent;
 import com.algaworks.brewer.service.exception.ImpossivelExcluirEntidadeException;
 
 @Service
@@ -20,6 +22,9 @@ public class CadastroPedidoService {
 
 	@Autowired
 	private Pedidos pedidos;
+	
+	@Autowired
+	private ApplicationEventPublisher publisher;
 	
 	@Transactional
 	public Pedido salvar(Pedido pedido) {
@@ -45,6 +50,8 @@ public class CadastroPedidoService {
 	public void emitir(Pedido pedido) {
 		pedido.setStatus(StatusPedido.EMITIDA);
 		salvar(pedido);
+		
+		publisher.publishEvent(new PedidoEvent(pedido));
 	}
 
 	@PreAuthorize("#pedido.usuario == principal.usuario or hasRole('CANCELAR_PEDIDO')")
