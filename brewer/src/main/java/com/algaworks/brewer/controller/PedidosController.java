@@ -30,6 +30,7 @@ import com.algaworks.brewer.controller.page.PageWrapper;
 import com.algaworks.brewer.controller.validator.PedidoValidator;
 import com.algaworks.brewer.mail.Mailer;
 import com.algaworks.brewer.dto.PedidoMes;
+import com.algaworks.brewer.dto.PedidoOrigem;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.model.ItemPedido;
 import com.algaworks.brewer.model.Pedido;
@@ -199,7 +200,12 @@ public class PedidosController {
 	@GetMapping("/totalPorMes")
 	public @ResponseBody List<PedidoMes> listarTotalPedidosPorMes() {
 		return pedidos.totalPorMes();
-	}	
+	}
+	
+	@GetMapping("/porOrigem")
+	public @ResponseBody List<PedidoOrigem> vendasPorNacionalidade() {
+		return this.pedidos.totalPorOrigem();
+	}
 
 	private ModelAndView mvTabelaItensPedido(String uuid) {
 		ModelAndView mv = new ModelAndView("pedido/TabelaItensPedido");

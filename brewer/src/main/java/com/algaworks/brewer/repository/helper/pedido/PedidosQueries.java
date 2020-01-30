@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.algaworks.brewer.dto.PedidoMes;
+import com.algaworks.brewer.dto.PedidoOrigem;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.repository.filter.PedidoFilter;
 
@@ -24,7 +25,7 @@ public interface PedidosQueries {
 	public BigDecimal valorTicketMedioNoAno();
 	
 	public List<PedidoMes> totalPorMes();
-	
-	public BigDecimal valorTotalEstoque();
+
+	public List<PedidoOrigem> totalPorOrigem();
 
 }

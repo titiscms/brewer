@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.algaworks.brewer.dto.PedidoMes;
+import com.algaworks.brewer.dto.PedidoOrigem;
 import com.algaworks.brewer.model.Pedido;
 import com.algaworks.brewer.model.StatusPedido;
 import com.algaworks.brewer.model.TipoPessoa;
@@ -93,7 +94,7 @@ public class PedidosImpl implements PedidosQueries {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<PedidoMes> totalPorMes() {
-		List<PedidoMes> pedidosMes = manager.createNamedQuery("Pedido.totalPorMes").getResultList();
+		List<PedidoMes> pedidosMes = manager.createNamedQuery("Pedidos.totalPorMes").getResultList();
 		
 		LocalDate hoje = LocalDate.now();
 		for(int i = 1; i <= 6; i++) {
@@ -104,7 +105,7 @@ public class PedidosImpl implements PedidosQueries {
 				pedidosMes.add(i - 1, new PedidoMes(mesIdeal, 0));
 			}
 			
-			if(pedidosMes.size() > 6){
+			if(pedidosMes.size() > 6) {
 				pedidosMes.remove(pedidosMes.size() - 1);
 			}
 			
@@ -113,11 +114,28 @@ public class PedidosImpl implements PedidosQueries {
 		
 		return pedidosMes;
 	}
-
+	
 	@Override
-	public BigDecimal valorTotalEstoque() {
+	public List<PedidoOrigem> totalPorOrigem() {
+		List<PedidoOrigem> pedidosNacionalidade = manager.createNamedQuery("Pedidos.porOrigem", PedidoOrigem.class).getResultList();
 		
-		return null;
+		LocalDate now = LocalDate.now();
+		for (int i = 1; i <= 6; i++) {
+			String mesIdeal = String.format("%d/%02d", now.getYear(), now.getMonth().getValue());
+			
+			boolean possuiMes = pedidosNacionalidade.stream().filter(v -> v.getMes().equals(mesIdeal)).findAny().isPresent();
+			if (!possuiMes) {
+				pedidosNacionalidade.add(i - 1, new PedidoOrigem(mesIdeal, 0, 0));
+			}
+			
+			if(pedidosNacionalidade.size() > 6) {
+				pedidosNacionalidade.remove(pedidosNacionalidade.size() - 1);
+			}
+			
+			now = now.minusMonths(1);
+		}
+		
+		return pedidosNacionalidade;
 	}
 
 	private Long total(PedidoFilter filtro) {
