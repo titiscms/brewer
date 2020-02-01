@@ -35,10 +35,10 @@ public class Cerveja {
 	private Long codigo;
 	
 	@SKU
-	@NotBlank(message = "O SKU é obrigatório o preenchimento" )
+	@NotBlank
 	private String sku;
 	
-	@NotBlank(message = "O nome é obrigatório o preenchimento")
+	@NotBlank
 	private String nome;
 	
 	@NotBlank(message = "A descrição é obrigatória")
