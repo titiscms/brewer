@@ -22,6 +22,7 @@ import com.algaworks.brewer.dto.ValorItensEstoque;
 import com.algaworks.brewer.model.Cerveja;
 import com.algaworks.brewer.repository.filter.CervejaFilter;
 import com.algaworks.brewer.repository.paginacao.PaginacaoUtil;
+import com.algaworks.brewer.storage.FotoStorage;
 
 public class CervejasImpl implements CervejasQueries {
 
@@ -31,6 +32,9 @@ public class CervejasImpl implements CervejasQueries {
 	
 	@PersistenceContext
 	private EntityManager manager;
+	
+	@Autowired
+	private FotoStorage fotoStorage;
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -49,6 +53,7 @@ public class CervejasImpl implements CervejasQueries {
 		String jpql = "select new com.algaworks.brewer.dto.CervejaDTO(codigo, sku, nome, origem, valor, foto) "
 				+ "from Cerveja where lower(sku) like lower(:skuOuNome) or lower(nome) like lower(:skuOuNome)";
 		List<CervejaDTO> cervejasFiltradas = manager.createQuery(jpql, CervejaDTO.class).setParameter("skuOuNome", skuOuNome + "%").getResultList();
+		cervejasFiltradas.forEach(c -> c.setUrlThumbnailFoto(fotoStorage.getUrl(FotoStorage.THUMBNAIL_PREFIX + c.getFoto())));
 		return cervejasFiltradas;
 	}
 	
