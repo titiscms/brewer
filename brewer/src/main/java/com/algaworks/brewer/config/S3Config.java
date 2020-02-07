@@ -14,7 +14,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 
-@PropertySource(value = { "file:${SystemDrive}/.brewerConfig/brewer-S3.properties" })
+@PropertySource(value = { "file:${SystemDrive}/.brewerConfig/brewer-S3.properties" }, ignoreResourceNotFound = true)
 @Configuration
 public class S3Config {
 	

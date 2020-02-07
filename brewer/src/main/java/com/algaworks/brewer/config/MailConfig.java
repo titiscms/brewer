@@ -16,7 +16,7 @@ import com.algaworks.brewer.mail.Mailer;
 @ComponentScan(basePackageClasses = Mailer.class)
 @Configuration
 @PropertySource({ "classpath:env/mail-${ambiente:local}.properties" })
-@PropertySource(value = { "file:${SystemDrive}/.brewerConfig/brewer-mail.properties" })
+@PropertySource(value = { "file:${SystemDrive}/.brewerConfig/brewer-mail.properties" }, ignoreResourceNotFound = true)
 public class MailConfig {
 	
 	@Autowired
@@ -27,8 +27,8 @@ public class MailConfig {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp-relay.sendinblue.com");
 		mailSender.setPort(587);
-		mailSender.setUsername(env.getProperty("email.username"));
-		mailSender.setPassword(env.getProperty("email.password"));
+		mailSender.setUsername(env.getProperty("SENDINBLUE_USERNAME"));
+		mailSender.setPassword(env.getProperty("SENDINBLUE_PASSWORD"));
 		
 		Properties props = new Properties();
 		props.put("mail.transport.protocol", "smtp");
