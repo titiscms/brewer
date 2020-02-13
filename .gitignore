@@ -8,6 +8,7 @@ target/
 bin/
 .mvn*
 mvnw*
+.factorypath
 
 # Arquivo para criar senha criptografada
 GeracaoSenha
