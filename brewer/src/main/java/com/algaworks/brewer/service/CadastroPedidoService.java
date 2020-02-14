@@ -35,7 +35,7 @@ public class CadastroPedidoService {
 		if(pedido.isNovo()) {
 			pedido.setDataCriacao(LocalDateTime.now());
 		} else {
-			Pedido pedidoExistente = pedidos.findOne(pedido.getCodigo());
+			Pedido pedidoExistente = pedidos.getOne(pedido.getCodigo());
 			pedido.setDataCriacao(pedidoExistente.getDataCriacao());
 		}
 				
@@ -57,7 +57,7 @@ public class CadastroPedidoService {
 	@PreAuthorize("#pedido.usuario == principal.usuario or hasRole('CANCELAR_PEDIDO')")
 	@Transactional
 	public void cancelar(Pedido pedido) {
-		Pedido pedidoExistente = pedidos.findOne(pedido.getCodigo());
+		Pedido pedidoExistente = pedidos.getOne(pedido.getCodigo());
 		
 		pedidoExistente.setStatus(StatusPedido.CANCELADA);
 		pedidos.save(pedidoExistente);

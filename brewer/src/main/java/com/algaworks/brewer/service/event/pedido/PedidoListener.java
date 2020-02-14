@@ -17,7 +17,7 @@ public class PedidoListener {
 	@EventListener
 	public void pedidoEmitida(PedidoEvent pedidoEvent) {
 		for(ItemPedido item : pedidoEvent.getPedido().getItens()) {
-			Cerveja cerveja = cervejas.findOne(item.getCerveja().getCodigo());
+			Cerveja cerveja = cervejas.getOne(item.getCerveja().getCodigo());
 			cerveja.setQuantidadeEstoque(cerveja.getQuantidadeEstoque() - item.getQuantidade());
 			cervejas.save(cerveja);
 		}
