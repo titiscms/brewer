@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
-@PropertySource(value = { "file:${SystemDrive}/.brewerConfig/brewer-mail.properties" }, ignoreResourceNotFound = true)
+@PropertySource(value = { "file:${user.home}/.brewerconfig/brewer-mail.properties" }, ignoreResourceNotFound = true)
 public class MailConfig {
 	
 	@Autowired
